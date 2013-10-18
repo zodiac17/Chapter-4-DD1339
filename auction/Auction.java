@@ -14,6 +14,7 @@ public class Auction
     // The number that will be given to the next lot entered
     // into this auction.
     private int nextLotNumber;
+    private Lot selectedLot;
 
     /**
      * Create a new auction.
@@ -80,25 +81,97 @@ public class Auction
      */
     public Lot getLot(int lotNumber)
     {
-        if((lotNumber >= 1) && (lotNumber < nextLotNumber)) {
-            // The number seems to be reasonable.
-            Lot selectedLot = lots.get(lotNumber - 1);
-            // Include a confidence check to be sure we have the
-            // right lot.
-            if(selectedLot.getNumber() != lotNumber) {
-                System.out.println("Internal error: Lot number " +
-                                   selectedLot.getNumber() +
-                                   " was returned instead of " +
-                                   lotNumber);
-                // Don't return an invalid lot.
+        int i = 0;
+        int count = lots.size() - 1;
+        
+        while(i == 0 && count >= 0){
+            if(lots.get(count).getNumber() == lotNumber){
+                i = 1;
+                selectedLot = lots.get(count);
+                System.out.println("Lot " + lotNumber +
+                           " found.");
+            }
+            else {
                 selectedLot = null;
             }
-            return selectedLot;
+            
+            count--;
         }
-        else {
+        
+        if(selectedLot == null) {
             System.out.println("Lot number: " + lotNumber +
-                               " does not exist.");
-            return null;
+                           " does not exist.");
         }
+        
+        return selectedLot;
+    }
+    
+    /**
+     * Close auction
+     */
+    public void close(){
+        System.out.println("Auction is now closed. Below, the lots sold are shown. Lots with no bids are also shown.");
+        for(Lot endedlot : lots){
+            if(endedlot.getHighestBid() != null ){
+                System.out.println(endedlot.toString());
+            } else {
+                System.out.println(endedlot.toString() + ", Unsold");
+            }
+        }
+        
+        lots.clear();
+        nextLotNumber = 1;
+    }
+    
+    /**
+     * Get unsold items
+     */
+    public ArrayList<Lot> getUnsold(){
+        System.out.println("Listing unsold lots:");
+        
+        ArrayList<Lot> unsoldlots = new ArrayList<Lot>();
+        
+        for(Lot unsoldlot : lots){
+            if(unsoldlot.getHighestBid() == null ){
+                System.out.println(unsoldlot.toString());
+            }
+        }
+        
+        return unsoldlots;
+    }
+    /**
+     * Remove the lot with the given lot number.
+     * @param number The number of the lot to be removed.
+     * @return The Lot with the given number, or null if
+     * there is no such lot.
+    */
+    public Lot removeLot(int number){
+        
+        
+        int i = 0;
+        int count = lots.size() - 1;
+        
+        while(i == 0 && count >= 0){
+            if(lots.get(count).getNumber() == number){
+                i = 1;
+                selectedLot = lots.get(count);
+                System.out.println("Lot " + number +
+                           " removed.");
+            }
+            else {
+                selectedLot = null;
+            }
+            
+            count--;
+        }
+        
+        if(selectedLot == null) {
+            System.out.println("Lot number: " + number +
+                           " does not exist.");
+        }
+        
+        lots.remove(lots.indexOf(selectedLot));
+        
+        return selectedLot;
     }
 }

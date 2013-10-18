@@ -53,7 +53,7 @@ public class Club
         
         int count = 0;
         
-        if(month > 0  && month < 13 && members.size() < 0){
+        if(month > 0  && month < 13 && members.size() > 0){
             
             for(int i = 0; i < members.size(); i++ ){
                 if(members.get(i).getMonth() == month){
@@ -71,4 +71,33 @@ public class Club
         }
         
     }
+    /**
+     * Remove from the club's collection all members who
+     * joined in the given month, and return them stored
+     * in a separate collection object.
+     * @param month The month of the membership.
+     * @param year The year of the membership.
+     * @return The members who joined in the given month and year.
+    */
+    public ArrayList<Membership> purge(int month, int year){
+        if(month > 0  && month < 13 && members.size() > 0){
+            
+            for(int i = 0; i < members.size(); i++ ){
+                if(members.get(i).getMonth() == month && members.get(i).getYear() == year){
+                    members.remove(i);
+                }
+            }
+            
+            return members;
+            
+        }
+        else {
+            
+            System.out.println("Make sure month is between 1 and 12 and members are available.");
+            
+            return members;
+
+        }
+    }
+    
 }

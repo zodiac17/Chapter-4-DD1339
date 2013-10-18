@@ -37,6 +37,12 @@ public class StockManager
      */
     public void delivery(int id, int amount)
     {
+        Product product = findProduct(id);
+        
+        if(product != null){
+            product.increaseQuantity(amount);
+        }
+
     }
     
     /**
@@ -46,6 +52,19 @@ public class StockManager
      */
     public Product findProduct(int id)
     {
+        
+        int i = 0;
+        int count = stock.size() - 1;
+        
+        while(i == 0 && count >= 0){
+            if(stock.get(count).getID() == id){
+                i = 1;
+                return stock.get(count);
+            }
+            
+            count--;
+        }
+        
         return null;
     }
     
@@ -58,7 +77,14 @@ public class StockManager
      */
     public int numberInStock(int id)
     {
-        return 0;
+        Product product = findProduct(id);
+        int quantity = 0;
+        
+        if(product != null){
+            quantity = product.getQuantity();
+        }
+        
+        return quantity;
     }
 
     /**
@@ -66,5 +92,8 @@ public class StockManager
      */
     public void printProductDetails()
     {
+        for(Product product : stock) {
+            System.out.println(product.toString());  
+        }
     }
 }
